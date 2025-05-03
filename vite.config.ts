@@ -28,7 +28,7 @@ export default defineConfig( (env) => {
       extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
     },
     server: {
-      port: 8000, // 端口号
+      port: 3000, // 端口号
       host: true, // 监听所有地址
       open: true, // 项目启动时是否自动在浏览器中打开应用程序
       hmr: true, // 开启热更新

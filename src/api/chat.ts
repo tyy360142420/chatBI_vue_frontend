@@ -45,3 +45,13 @@ export function chatCompletions(stream: AbortSignal ,messages: Chat.Conversation
     signal: stream
   });
 }
+
+export function chatForBI(question:string,uuid:number) {
+  return fetchRequest("/chat/askQuestion", {
+    method: "POST",
+    body: {
+      question:question,
+      uuid:uuid
+    },
+  });
+}

@@ -141,7 +141,7 @@ async function onNoStreamConversation(){
       paramMsg.push(...conversationList)
     }
     paramMsg.push({ role: 'user', content: message })
-    const response: any = await chatForBI(questionFromUser.value, +uuid)
+    const response: any = await chatForBI(message, +uuid)
     await handleStreamResponse(response, (jsonData: any) => {
       console.log(jsonData)
       const contentText = jsonData

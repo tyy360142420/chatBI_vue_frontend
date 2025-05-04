@@ -11,16 +11,21 @@
             <div class="text-14px mt-10px">我可以帮你写代码、读文件、写作各种创意内容，请把你的任务交给我吧~</div>
           </div>
           <div v-else>
-            <pie-chart></pie-chart>
-            <Message
-              v-for="(item, index) of dataSources"
-              :key="index"
-              :date-time="item.dateTime"
-              :text="item.text"
-              :reasoning="item.reasoning"
-              :inversion="item.inversion"
-              :error="item.error"
-              :loading="item.loading" />
+            <template
+                v-for="(item, index) of dataSources" :key="index">
+              {{JSON.stringify(item)}}
+              <normal-table v-if="item.chatBIResponse?.display_type===DisplayType.DISPLAY_TABLE && !item.inversion"
+              :response-of-chat-b-i="item.chatBIResponse">
+              </normal-table>
+              <Message
+                  v-else-if="item.inversion"
+                  :date-time="item.dateTime"
+                  :text="item.text"
+                  :reasoning="item.reasoning"
+                  :inversion="item.inversion"
+                  :error="item.error"
+                  :loading="item.loading" />
+            </template>
           </div>
         </div>
       </el-scrollbar>
@@ -57,6 +62,7 @@
 import { Position, CloseBold } from '@element-plus/icons-vue'
 import Message from './components/Message/index.vue'
 import PieChart from './components/Charts/pie-chart.vue'
+import NormalTable from "@/views/chat/components/Charts/normal-table.vue";
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import {chatCompletions, chatForBI} from '@/api/chat'
 import { useChat } from './hooks/useChat'
@@ -65,6 +71,8 @@ import { useChatStore } from '@/store'
 import { useRoute } from 'vue-router'
 import { useReadStream } from './hooks/useReadStream'
 import { ss } from "@/utils/storage";
+import {useReadNoStream} from "@/views/chat/hooks/useReadNoStream.ts";
+import {DisplayType} from "#/types-chatBI.ts";
 let controller = new AbortController()
 const chatStore = useChatStore()
 const route = useRoute()
@@ -73,6 +81,7 @@ const route = useRoute()
 const { addChat, updateChat } = useChat()
 const { scrollRef, scrollToBottom, scrollToBottomIfAtBottom } = useScroll()
 const { handleStreamResponse } = useReadStream()
+const { handleNoStreamResponse } = useReadNoStream()
 const { uuid } = route.params as { uuid: string }
 // 输入框
 const questionFromUser = ref<string>('')
@@ -142,20 +151,24 @@ async function onNoStreamConversation(){
     }
     paramMsg.push({ role: 'user', content: message })
     const response: any = await chatForBI(message, +uuid)
-    await handleStreamResponse(response, (jsonData: any) => {
-      console.log(jsonData)
+    console.log(11)
+    console.log(response)
+    await handleNoStreamResponse(response, (jsonData: any) => {
       const contentText = jsonData
+      console.log("contentText")
+      console.log(contentText)
       if (contentText) {
         updateChat(+uuid, dataSources.value.length - 1, {
           text: contentText ?? '',
           inversion: false,
           error: false,
           loading: true,
+          chatBIResponse:jsonData
         })
         scrollToBottomIfAtBottom()
       }
       // 思考信息
-      const reasoning = jsonData.choices[0].delta.reasoning_content
+      const reasoning = jsonData.thoughts
       if (reasoning) {
         updateChat(+uuid, dataSources.value.length - 1, {
           reasoning: reasoning ?? '',
@@ -163,6 +176,7 @@ async function onNoStreamConversation(){
           inversion: false,
           error: false,
           loading: true,
+          chatBIResponse:jsonData
         })
         scrollToBottomIfAtBottom()
       }
@@ -173,7 +187,7 @@ async function onNoStreamConversation(){
       loading: false,
     })
     loading.value = false
-    console.log('Stream ended')
+    console.log('query ended')
   } catch (error: any) {
     console.log(error)
     loading.value = false

@@ -49,9 +49,9 @@ export function chatCompletions(stream: AbortSignal ,messages: Chat.Conversation
 export function chatForBI(question:string,uuid:number) {
   return fetchRequest("/chat/askQuestion", {
     method: "POST",
-    body: {
+    body: JSON.stringify({
       question:question,
       uuid:uuid
-    },
+    }),
   });
 }

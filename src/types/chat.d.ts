@@ -1,3 +1,5 @@
+import {NoStreamChatBIResponse} from "#/types-chatBI.ts";
+
 declare namespace Chat {
 
 	interface Chat {
@@ -8,6 +10,7 @@ declare namespace Chat {
 		inversion?: boolean
 		error?: boolean
 		loading?: boolean
+		chatBIResponse?:NoStreamChatBIResponse;
 	}
 
 	interface History {

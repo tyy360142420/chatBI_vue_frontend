@@ -14,6 +14,8 @@
             <template
                 v-for="(item, index) of dataSources" :key="index">
               {{JSON.stringify(item)}}
+              <bar-chart></bar-chart>
+              <pie-chart></pie-chart>
               <normal-table v-if="item.chatBIResponse?.display_type===DisplayType.DISPLAY_TABLE && !item.inversion"
               :response-of-chat-b-i="item.chatBIResponse">
               </normal-table>
@@ -63,6 +65,7 @@ import { Position, CloseBold } from '@element-plus/icons-vue'
 import Message from './components/Message/index.vue'
 import PieChart from './components/Charts/pie-chart.vue'
 import NormalTable from "@/views/chat/components/Charts/normal-table.vue";
+import BarChart from "@/views/chat/components/Charts/bar-chart.vue";
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import {chatCompletions, chatForBI} from '@/api/chat'
 import { useChat } from './hooks/useChat'

@@ -17,7 +17,9 @@ export default defineConfig( (env) => {
         resolvers: [ElementPlusResolver()],
       }),
       Components({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [ElementPlusResolver({
+          importStyle:"sass"
+        })],
       }),
     ],
     resolve: {

@@ -13,14 +13,13 @@
           <div v-else>
             <template
                 v-for="(item, index) of dataSources" :key="index">
-              {{JSON.stringify(item)}}
-              <bar-chart></bar-chart>
-              <pie-chart></pie-chart>
               <normal-table v-if="item.chatBIResponse?.display_type===DisplayType.DISPLAY_TABLE && !item.inversion"
               :response-of-chat-b-i="item.chatBIResponse">
               </normal-table>
+              <bar-chart v-else-if="item.chatBIResponse?.display_type===DisplayType.DISPLAY_BAR_CHART && !item.inversion"></bar-chart>
+              <pie-chart v-else-if="item.chatBIResponse?.display_type===DisplayType.DISPLAY_PIE_CHART && !item.inversion"></pie-chart>
               <Message
-                  v-else-if="item.inversion"
+                  v-if="item.inversion"
                   :date-time="item.dateTime"
                   :text="item.text"
                   :reasoning="item.reasoning"

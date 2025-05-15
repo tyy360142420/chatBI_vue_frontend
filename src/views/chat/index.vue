@@ -17,7 +17,7 @@
               :response-of-chat-b-i="item.chatBIResponse">
               </normal-table>
               <bar-chart v-else-if="item.chatBIResponse?.display_type===DisplayType.DISPLAY_BAR_CHART && !item.inversion"></bar-chart>
-              <pie-chart v-else-if="item.chatBIResponse?.display_type===DisplayType.DISPLAY_PIE_CHART && !item.inversion"></pie-chart>
+              <pie-chart  :response-of-chat-b-i="item.chatBIResponse" v-else-if="item.chatBIResponse?.display_type===DisplayType.DISPLAY_PIE_CHART && !item.inversion"></pie-chart>
               <Message
                   v-if="item.inversion"
                   :date-time="item.dateTime"

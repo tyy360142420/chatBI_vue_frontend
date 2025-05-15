@@ -18,6 +18,9 @@
               </normal-table>
               <bar-chart v-else-if="item.chatBIResponse?.display_type===DisplayType.DISPLAY_BAR_CHART && !item.inversion"></bar-chart>
               <pie-chart  :response-of-chat-b-i="item.chatBIResponse" v-else-if="item.chatBIResponse?.display_type===DisplayType.DISPLAY_PIE_CHART && !item.inversion"></pie-chart>
+              <line-chart :response-of-chat-b-i="item.chatBIResponse" v-else-if="item.chatBIResponse?.display_type===DisplayType.DISPLAY_LINE_CHART && !item.inversion"></line-chart>
+
+
               <Message
                   v-if="item.inversion"
                   :date-time="item.dateTime"
@@ -63,6 +66,7 @@
 import { Position, CloseBold } from '@element-plus/icons-vue'
 import Message from './components/Message/index.vue'
 import PieChart from './components/Charts/pie-chart.vue'
+import LineChart from './components/Charts/line-chart.vue'
 import NormalTable from "@/views/chat/components/Charts/normal-table.vue";
 import BarChart from "@/views/chat/components/Charts/bar-chart.vue";
 import { ref, computed, onMounted, onUnmounted } from 'vue'
